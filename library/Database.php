@@ -32,4 +32,10 @@ class Database
         $this->conn->query($query);
 
     }
+
+    public function prepare($query) {
+
+        return $this->conn->prepare($query);
+
+    }
 }

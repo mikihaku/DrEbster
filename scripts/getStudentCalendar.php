@@ -40,9 +40,7 @@ while (($row = fgetcsv($file, 10000, ",")) !== FALSE) {
 
     $res['elective'] = strpos($row[5], ",") !== FALSE ? 1 : 0;
 
-    echo "<pre>";
     print_r($res);
-    echo "</pre>";
 
     $query = "INSERT INTO `schedule` VALUES (NULL, ".$res['start'].", ".$res['finish'].", 
                                                   '".$res['name']."', '".$res['teacher']."', '".$res['room_number']."', 
