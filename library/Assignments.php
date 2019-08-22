@@ -26,7 +26,6 @@ class Assignments
         $request_headers[] = 'Authorization: Bearer '.$this->key;
 
         $ch = curl_init($this->baseUrl.$url);
-        echo $this->baseUrl.$url."\n";
               curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
               curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -100,6 +99,22 @@ class Assignments
             if($className == $assignment['name']) {
 
                 return $allAssignments[$assignmentId]['assignments'];
+
+            }
+        }
+    }
+
+    public function getClassIdByName($className) {
+
+        $className = $className . " IntMBA-2";
+
+        $activeCourses = $this->getActiveCourses();
+
+        foreach ($activeCourses as $courseId => $courseName) {
+
+            if($courseName == $className) {
+
+                return $courseId;
 
             }
         }

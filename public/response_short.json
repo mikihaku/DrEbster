@@ -1,0 +1,37 @@
+{
+    "fulfillmentText": "{TEXT_2_SPEECH}",
+    "fulfillmentMessages": [
+        {
+
+        }
+    ],
+    "source": "drebster.greensun.eu",
+    "payload": {
+        "google": {
+            "expectUserResponse": true,
+                "richResponse": {
+                "items": [
+                    {
+                        "simpleResponse": {
+                            "textToSpeech": "{TEXT_2_SPEECH}"
+                        }
+                    },
+                    {
+                        "simpleResponse": {
+                            "textToSpeech": "\n{TEXT_2_CONTINUE}"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "outputContexts": [
+        {
+            "name": "projects/{PROJECT_ID}/agent/sessions/{SESSION_ID}/contexts/Whenisthenextclass-followup",
+            "lifespanCount": 5,
+            "parameters": {
+                "classId": "{CLASS_ID}"
+            }
+        }
+    ]
+}

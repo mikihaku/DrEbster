@@ -1,0 +1,64 @@
+{
+    "fulfillmentText": "{TEXT_2_SPEECH}",
+    "fulfillmentMessages": [
+        {
+            "card": {
+                "title": "{CLASS_NAME}",
+                "imageUri": "https://drebster.greensun.eu/img/online-course-512.png",
+                "buttons": [
+                    {
+                        "text": "Open the course in Canvas",
+                        "postback": "https://ebs.instructure.com/courses/{CLASS_ID}/"
+                    }
+                ]
+            }
+        }
+    ],
+    "source": "drebster.greensun.eu",
+    "payload": {
+        "google": {
+            "expectUserResponse": true,
+                "richResponse": {
+                "items": [
+                    {
+                        "simpleResponse": {
+                            "textToSpeech": "{TEXT_2_SPEECH}"
+                        }
+                    },
+                    {
+                        "basicCard": {
+                            "title": "{CLASS_NAME}",
+                            "image": {
+                                "url": "https://drebster.greensun.eu/img/online-course-512.png",
+                                "accessibilityText": "Course icon"
+                            },
+                            "buttons": [
+                                {
+                                    "title": "Open the course in Canvas",
+                                    "openUrlAction": {
+                                        "url": "https://ebs.instructure.com/courses/{CLASS_ID}/"
+                                    }
+                                }
+                            ],
+                            "imageDisplayOptions": "CROPPED"
+                        }
+                    },
+                    {
+                        "simpleResponse": {
+                            "textToSpeech": "\n{TEXT_2_CONTINUE}"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "outputContexts": [
+        {
+            "name": "projects/{PROJECT_ID}/agent/sessions/{SESSION_ID}/contexts/Whenisthenextclass-followup",
+            "lifespanCount": 5,
+            "parameters": {
+                "classId": "{CLASS_ID}"
+            }
+        }
+    ]
+}

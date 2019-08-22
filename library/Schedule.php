@@ -19,7 +19,7 @@ class Schedule
         $query = "SELECT * FROM schedule WHERE start > ? LIMIT 1";
         $stmt  = $this->db->prepare($query);
         $stmt->execute([time()]);
-        $class = $stmt->fetch();
+        $class = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $class;
     }
@@ -29,7 +29,7 @@ class Schedule
         $query = "SELECT `teacher` FROM schedule WHERE ID > ?";
         $stmt  = $this->db->prepare($query);
         $stmt->execute([$classId]);
-        $result = $stmt->fetch();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -39,7 +39,7 @@ class Schedule
         $query = "SELECT `room_name`, `room_number` FROM schedule WHERE ID > ?";
         $stmt  = $this->db->prepare($query);
         $stmt->execute([$classId]);
-        $result = $stmt->fetch();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -49,7 +49,7 @@ class Schedule
         $query = "SELECT `elective` FROM schedule WHERE ID > ?";
         $stmt  = $this->db->prepare($query);
         $stmt->execute([$classId]);
-        $result = $stmt->fetch();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result;
     }
