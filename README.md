@@ -9,4 +9,4 @@ Produced as a part of an assignment for EBS class.
 - More information about the project may be found on local [Wiki](https://github.com/mikihaku/TheEbsterApp/wiki
 ) 
 ## Feedback
-Please, take some time to give feedback in of our Slack chats
+Please, take some time to give feedback in one of our Slack chats
