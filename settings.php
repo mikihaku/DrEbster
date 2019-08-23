@@ -1,10 +1,10 @@
 <?php
 
-date_default_timezone_set("Europe/Tallinn");
+date_default_timezone_set("Europe/Tallinn"); // Very important to set the local time
 
 $dbhost = "localhost";
-$dbname = "drebster";
-$dbuser = "root";
-$dbpass = "EBSrocks2019";
+$dbname = "*******";
+$dbuser = "*******";
+$dbpass = "*******";
 
-$canvasKey = "11181~K09BeqT51RLupfgXbbXEMCpM3HBcD9fl5gX2AUptex34xhMauoobZLysYcJEwcbH";
+$canvasKey = "**************";

@@ -1,11 +1,16 @@
 <?php
 
-
+/**
+ * Class Schedule. Handles requests about 'Next class'
+ */
 class Schedule
 {
 
     private $db;
 
+    /**
+     * Schedule constructor. Connect to the database.
+     */
     public function __construct()
     {
 
@@ -14,6 +19,11 @@ class Schedule
 
     }
 
+    /**
+     * Returns the class that has the string date nearest to current date and time
+     *
+     * @return mixed
+     */
     public function getNextClass() {
 
         $query = "SELECT * FROM schedule WHERE start > ? LIMIT 1";
@@ -24,6 +34,12 @@ class Schedule
         return $class;
     }
 
+    /**
+     * Return the name of the teacher for the nearest class
+     *
+     * @param $classId
+     * @return mixed
+     */
     public function getTeacher($classId) {
 
         $query = "SELECT `teacher` FROM schedule WHERE ID > ?";
@@ -34,6 +50,12 @@ class Schedule
         return $result;
     }
 
+    /**
+     * Return room number and the floor of the nearest class
+     *
+     * @param $classId
+     * @return mixed
+     */
     public function getRoom($classId) {
 
         $query = "SELECT `room_name`, `room_number` FROM schedule WHERE ID > ?";
@@ -44,6 +66,12 @@ class Schedule
         return $result;
     }
 
+    /**
+     * Return the value of the 'elective' attribute for the next class
+     *
+     * @param $classId
+     * @return mixed
+     */
     public function getElectiveStatus($classId) {
 
         $query = "SELECT `elective` FROM schedule WHERE ID > ?";

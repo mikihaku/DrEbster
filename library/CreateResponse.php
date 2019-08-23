@@ -1,19 +1,24 @@
 <?php
 
-
+/**
+ * Class CreateResponse. Handles the request from the Dialogflow API.
+ */
 class CreateResponse
 {
 
-    private $projectId       = "businessappebs";
-    private $baseIntentUrl = "projects/businessappebs/agent/intents/";
-    private $classId;
-    private $className;
-    private $sessionId;
-    private $replyType;
-    private $assignments = array();
+    private $projectId = "businessappebs"; // Project name inside GCP
+    private $baseIntentUrl = "projects/businessappebs/agent/intents/"; // Service variable
+    private $classId; // Course ID in Canvas
+    private $className; // The name of the course in Canvas or TimeEdit
+    private $sessionId; // Service variable
+    private $replyType;  // Service variable
+    private $assignments = array(); // Service variable
+    private $request;  // Request that came from the Dialogflow
 
-    private $request;
-
+    /**
+     * CreateResponse constructor. Get access to the settings and handlers.
+     * @param $request
+     */
     public function __construct($request)
     {
 
@@ -27,6 +32,10 @@ class CreateResponse
 
     }
 
+    /**
+     * Routes request to the specific handler based on the request data, collects the response components,
+     * sends data back to the server.
+     */
     public function processRequest() {
 
         // Following are the intent IDs to figure out what are we talking about
@@ -58,6 +67,7 @@ class CreateResponse
             // What is the nearest assignment dead line?
             case $this->baseIntentUrl."7c5cde37-8a49-4c0e-87cd-39974d76048e": $text2speech = $this->getNextAssignment();
                 break;
+            // TODO Finish getAllAssignments implementation
             // What assignments do I have?
             //case $this->baseIntentUrl."65cc06cc-103d-4682-8b27-47551cd1a6c4": $text2speech = $this->getAllAssignments();
             //    break;
@@ -67,18 +77,31 @@ class CreateResponse
 
         }
 
+        // Set the type of reply
         header('Content-Type: application/json');
 
+        // Use different template based on the response type
         if($this->replyType == "full" OR $this->replyType == "short") {
 
+
             if($this->replyType == "full") {
-                $template = file_get_contents("../public/response_full.json");
+                $template = file_get_contents("../public/response_full.json"); // Respond with a card
             } else {
-                $template = file_get_contents("../public/response_short.json");
+                $template = file_get_contents("../public/response_short.json"); // Respond with simple text
             }
 
-            $macro  = array("{TEXT_2_CONTINUE}","{TEXT_2_SPEECH}","{CLASS_NAME}","{CLASS_ID}","{PROJECT_ID}","{SESSION_ID}");
-            $values = array($this->getRandomContinueQuestion(), $text2speech, $this->className, $this->classId, $this->projectId, $this->sessionId);
+            $macro  = array("{TEXT_2_CONTINUE}",
+                            "{TEXT_2_SPEECH}",
+                            "{CLASS_NAME}",
+                            "{CLASS_ID}",
+                            "{PROJECT_ID}",
+                            "{SESSION_ID}");
+            $values = array($this->getRandomContinueQuestion(),
+                            $text2speech,
+                            $this->className,
+                            $this->classId,
+                            $this->projectId,
+                            $this->sessionId);
             $template = str_replace($macro, $values, $template);
 
             print $template;
@@ -86,6 +109,7 @@ class CreateResponse
 
         if($this->replyType == "deadline") {
 
+            // Respond with a card, but different
             $template = file_get_contents("../public/response_deadline.json");
 
             $macro  = array("{TEXT_2_CONTINUE}",
@@ -109,13 +133,15 @@ class CreateResponse
 
         if($this->replyType == "list") {
 
-            require "../public/response_list.json";
+            require "../public/response_list.json"; // Respond with a carousel
 
         }
     }
 
     /**
+     * Replies with the information about the next class
      *
+     * @return string
      */
     public function getNextClassText() {
 
@@ -148,7 +174,7 @@ class CreateResponse
     }
 
     /**
-     *
+     * Replies with the information about the next class teacher
      */
     private function getNextClassTeacher() {
 
@@ -164,7 +190,7 @@ class CreateResponse
     }
 
     /**
-     *
+     * Replies with the information about the next class room number and floor
      */
     private function getNextClassRoomNumber() {
 
@@ -188,7 +214,7 @@ class CreateResponse
     }
 
     /**
-     *
+     * Replies with the information about the next class elective attribute
      */
     private function getNextClassElectiveAttr() {
 
@@ -209,7 +235,7 @@ class CreateResponse
     }
 
     /**
-     *
+     * Replies with the information about the next assignments
      */
     private function getNextClassAssignments() {
 
@@ -230,7 +256,7 @@ class CreateResponse
     }
 
     /**
-     *
+     * Replies with the information about the nearest deadline of an assignment
      */
     private function getNextAssignment() {
 
@@ -245,9 +271,9 @@ class CreateResponse
 
     }
 
-    /**
+    /*
      *
-     *//*
+     *
     private function getAllAssignments() {
 
         $this->replyType = "short";
@@ -255,7 +281,7 @@ class CreateResponse
     }*/
 
     /**
-     *
+     * Return one of four variants of the engagement questions
      */
     private function getRandomContinueQuestion() {
 

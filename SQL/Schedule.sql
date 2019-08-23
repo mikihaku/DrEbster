@@ -13,5 +13,4 @@ CREATE TABLE `drebster`.`schedule` (
                                        INDEX `start` (`start` ASC),
                                        INDEX `finish` (`finish` ASC));
 
-ALTER TABLE `drebster`.`schedule`
-    CHANGE COLUMN `ID` `ID` INT(11) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `drebster`.`schedule` CHANGE COLUMN `ID` `ID` INT(11) NOT NULL AUTO_INCREMENT ;

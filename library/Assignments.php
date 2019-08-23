@@ -1,12 +1,17 @@
 <?php
 
-
+/**
+ * Class Assignments. Deals with queries to the Canvas API
+ */
 class Assignments
 {
 
-    private $key;
-    private $baseUrl = "https://ebs.instructure.com/api/v1/";
+    private $key; // API Authentication key
+    private $baseUrl = "https://ebs.instructure.com/api/v1/"; // URL of the EBS canvas pages
 
+    /**
+     * Assignments constructor. Do some initialization of the class.
+     */
     public function __construct()
     {
         $canvasKey = "";
@@ -17,6 +22,12 @@ class Assignments
 
     }
 
+    /**
+     * Send request to the API
+     *
+     * @param $url
+     * @return bool|string
+     */
     private function sendRequest($url) {
 
         $User_Agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31';
@@ -33,6 +44,11 @@ class Assignments
 
     }
 
+    /**
+     * Return all available course
+     *
+     * @return mixed
+     */
     private function getCourses() {
 
         $rawResponse = $this->sendRequest("courses");
@@ -42,6 +58,11 @@ class Assignments
         return $courses;
     }
 
+    /**
+     * Return ony courses that started maximum 3 month ago
+     *
+     * @return array
+     */
     private function getActiveCourses() {
 
         $allCourses = $this->getCourses();
@@ -60,6 +81,11 @@ class Assignments
         return $activeCourses;
     }
 
+    /**
+     * Returns all assignments for the active courses
+     *
+     * @return array
+     */
     public function getActiveCoursesAssignments() {
 
         $activeCourses = $this->getActiveCourses();
@@ -90,6 +116,12 @@ class Assignments
         return $courseAssignments;
     }
 
+    /**
+     * Get assignments from the course defined by name
+     *
+     * @param $className
+     * @return mixed
+     */
     public function getAssignmentsByClassName($className) {
 
         $className = $className . " IntMBA-2";
@@ -106,14 +138,17 @@ class Assignments
         }
     }
 
+    /**
+     * Returns an assignment that has least time before deadline
+     *
+     * @return array|mixed
+     */
     public function getNearestDeadlineAssignment() {
 
         $courses = $this->getActiveCoursesAssignments();
 
         $nearestAssignment = array();
         $nearestDeadLine   = 99999999999999999;
-
-        //print_r($allAssignments);
 
         foreach ($courses as $courseId => $courseContent) {
 
@@ -132,6 +167,12 @@ class Assignments
         return $nearestAssignment;
     }
 
+    /**
+     * Returns ID of the course defined by the name
+     *
+     * @param $className
+     * @return int|string
+     */
     public function getClassIdByName($className) {
 
         $className = $className . " IntMBA-2";

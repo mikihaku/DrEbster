@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * The script grabs the export file that contains information about the schedule of our group
+ * and puts it into the local database.
+ *
+ * The SQL script to create a database and table to store the schedule is in the SQL folder.
+ */
+
 require "../library/Database.php";
 $db = new Database();
 

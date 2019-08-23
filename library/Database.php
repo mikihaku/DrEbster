@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * Class Database. Handles connections to the database, queries and result formatting
+ */
 class Database
 {
 
     private $conn;
 
+    /**
+     * Database constructor. Establishes connections to the database
+     */
     public function __construct()
     {
 
@@ -27,12 +33,23 @@ class Database
 
     }
 
+    /**
+     * Sends simple query to the database
+     *
+     * @param $query
+     */
     public function query($query) {
 
         $this->conn->query($query);
 
     }
 
+    /**
+     * Prepares a query that has parameters
+     *
+     * @param $query
+     * @return bool|PDOStatement
+     */
     public function prepare($query) {
 
         return $this->conn->prepare($query);
