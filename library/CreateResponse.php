@@ -10,6 +10,7 @@ class CreateResponse
     private $className;
     private $sessionId;
     private $replyType;
+    private $assignments = array();
 
     private $request;
 
@@ -58,8 +59,8 @@ class CreateResponse
             case $this->baseIntentUrl."7c5cde37-8a49-4c0e-87cd-39974d76048e": $text2speech = $this->getNextAssignment();
                 break;
             // What assignments do I have?
-            case $this->baseIntentUrl."65cc06cc-103d-4682-8b27-47551cd1a6c4": $text2speech = $this->getAllAssignments();
-                break;
+            //case $this->baseIntentUrl."65cc06cc-103d-4682-8b27-47551cd1a6c4": $text2speech = $this->getAllAssignments();
+            //    break;
             default:
                 $text2speech = "I didn't quite get that...";
 
@@ -68,18 +69,49 @@ class CreateResponse
 
         header('Content-Type: application/json');
 
-        if($this->replyType == "full") {
-            $template = file_get_contents("../public/response_full.json");
-        } else {
-            $template = file_get_contents("../public/response_short.json");
+        if($this->replyType == "full" OR $this->replyType == "short") {
+
+            if($this->replyType == "full") {
+                $template = file_get_contents("../public/response_full.json");
+            } else {
+                $template = file_get_contents("../public/response_short.json");
+            }
+
+            $macro  = array("{TEXT_2_CONTINUE}","{TEXT_2_SPEECH}","{CLASS_NAME}","{CLASS_ID}","{PROJECT_ID}","{SESSION_ID}");
+            $values = array($this->getRandomContinueQuestion(), $text2speech, $this->className, $this->classId, $this->projectId, $this->sessionId);
+            $template = str_replace($macro, $values, $template);
+
+            print $template;
         }
 
-        $macro  = array("{TEXT_2_CONTINUE}","{TEXT_2_SPEECH}","{CLASS_NAME}","{CLASS_ID}","{PROJECT_ID}","{SESSION_ID}");
-        $values = array($this->getRandomContinueQuestion(), $text2speech, $this->className, $this->classId, $this->projectId, $this->sessionId);
-        $template = str_replace($macro, $values, $template);
+        if($this->replyType == "deadline") {
 
-        print $template;
+            $template = file_get_contents("../public/response_deadline.json");
 
+            $macro  = array("{TEXT_2_CONTINUE}",
+                            "{TEXT_2_SPEECH}",
+                            "{ASSIGNMENT_NAME}",
+                            "{CLASS_ID}",
+                            "{PROJECT_ID}",
+                            "{SESSION_ID}",
+                            "{ASSIGNMENT_ID}");
+            $values = array($this->getRandomContinueQuestion(),
+                            $text2speech,
+                            $this->assignments['name'],
+                            $this->assignments['course_id'],
+                            $this->projectId,
+                            $this->sessionId,
+                            $this->assignments['id']);
+            $template = str_replace($macro, $values, $template);
+
+            print $template;
+        }
+
+        if($this->replyType == "list") {
+
+            require "../public/response_list.json";
+
+        }
     }
 
     /**
@@ -150,7 +182,7 @@ class CreateResponse
         if($floor == 3) $floor .= "rd";
         if($floor == 4) $floor .= "th";
 
-        $text = "The class will be in the room ".$room." on the ".$floor." floor.";
+        $text = "The class will happen in the room ".$room." on the ".$floor." floor.";
         return $text;
 
     }
@@ -181,8 +213,20 @@ class CreateResponse
      */
     private function getNextClassAssignments() {
 
-        $this->replyType = "short";
+        $this->replyType = "list";
 
+        $sc        = new Schedule();
+        $nextClass = $sc->getNextClass();
+        $this->className = $nextClass['name'];
+
+        //
+        $ass = new Assignments();
+        $this->assignments = $ass->getAssignmentsByClassName($this->className);
+        $this->classId     = $ass->getClassIdByName($this->className);
+
+        $text = "Here is the list of upcoming assignments for this class.";
+
+        return $text;
     }
 
     /**
@@ -190,18 +234,25 @@ class CreateResponse
      */
     private function getNextAssignment() {
 
-        $this->replyType = "short";
-        //$this->classId = $this->request->outputContexts->parameters->classId;
+        $this->replyType = "deadline";
+
+        $ass = new Assignments();
+        $this->assignments = $ass->getNearestDeadlineAssignment();
+
+        $text = "Here is the most urgent assignment with the deadline on ".date("jS M Y", $this->assignments['deadline']).".";
+
+        return $text;
+
     }
 
     /**
      *
-     */
+     *//*
     private function getAllAssignments() {
 
         $this->replyType = "short";
 
-    }
+    }*/
 
     /**
      *

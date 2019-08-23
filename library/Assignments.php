@@ -60,7 +60,7 @@ class Assignments
         return $activeCourses;
     }
 
-    public function getActiveCourseAssignments() {
+    public function getActiveCoursesAssignments() {
 
         $activeCourses = $this->getActiveCourses();
         $courseAssignments = array();
@@ -78,7 +78,9 @@ class Assignments
                                                             "deadline" => strtotime($assignment->due_at),
                                                             "grading" => $assignment->grading_type,
                                                             "name" => $assignment->name,
-                                                            "possible_points" => $assignment->points_possible
+                                                            "possible_points" => $assignment->points_possible,
+                                                            "course_id" => $courseId,
+                                                            "course_name" => $courseName
                                                             );
             }
 
@@ -92,7 +94,7 @@ class Assignments
 
         $className = $className . " IntMBA-2";
 
-        $allAssignments = $this->getActiveCourseAssignments();
+        $allAssignments = $this->getActiveCoursesAssignments();
 
         foreach ($allAssignments as $assignmentId => $assignment) {
 
@@ -102,6 +104,32 @@ class Assignments
 
             }
         }
+    }
+
+    public function getNearestDeadlineAssignment() {
+
+        $courses = $this->getActiveCoursesAssignments();
+
+        $nearestAssignment = array();
+        $nearestDeadLine   = 99999999999999999;
+
+        //print_r($allAssignments);
+
+        foreach ($courses as $courseId => $courseContent) {
+
+            foreach ($courseContent['assignments'] as $assignmentId => $assignment) {
+
+                if($assignment['deadline'] > time() AND $assignment['deadline'] < $nearestDeadLine) {
+
+                    $nearestDeadLine = $assignment['deadline'];
+                    $nearestAssignment = $assignment;
+
+                }
+
+            }
+        }
+
+        return $nearestAssignment;
     }
 
     public function getClassIdByName($className) {

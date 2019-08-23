@@ -1,0 +1,73 @@
+{
+    "fulfillmentText": "<?= $text2speech ?>",
+    "fulfillmentMessages": [
+        {
+
+        }
+    ],
+    "source": "drebster.greensun.eu",
+    "payload": {
+        "google": {
+            "expectUserResponse": true,
+                "richResponse": {
+                "items": [
+                    {
+                        "simpleResponse": {
+                            "textToSpeech": "<?= $text2speech ?>"
+                        }
+                    },
+                    {
+                        "carouselBrowse": {
+                            "items": [
+                                <?php
+                                    $lastIndex = count($this->assignments);
+                                    $i = 0;
+                                ?>
+                                <?php foreach ($this->assignments as $assignmentID => $assignment) { ?>
+                                <?php $i = $i + 1; ?>
+                                <?php if($assignment['deadline'] < time()) continue; ?>
+                                {
+                                    "description": "Possible points: <?= $assignment['possible_points'] == false ? 'No graded' : $assignment['possible_points'] ?>",
+                                    "footer": "Due date: <?= date('jS M Y', $assignment['deadline']); ?>",
+                                    "image": {
+                                        "accessibilityText": "Assignment icon",
+                                        "url": "https://drebster.greensun.eu/img/assignment.png"
+                                    },
+                                    "openUrlAction": {
+                                        "url": "https://ebs.instructure.com/courses/<?= $this->classId ?>/assignments/<?= $assignmentID ?>"
+                                    },
+                                    "title": "<?= addslashes($assignment['name']); ?>"
+                                }
+                                <?php if ($i < $lastIndex) { ?>
+                                ,
+                                <?php }} ?>
+                            ]
+                        }
+                    },
+                        {
+                        "simpleResponse": {
+                            "textToSpeech": "<?= $this->getRandomContinueQuestion() ?>"
+                        }
+                    }
+                ],
+                "suggestions": [
+                    {
+                        "title": "Who is the teacher?"
+                    },
+                    {
+                        "title": "Got everything I needed"
+                    }
+                ]
+            }
+        }
+    },
+    "outputContexts": [
+        {
+            "name": "projects/<?= $this->projectId ?>/agent/sessions/<?= $this->sessionId ?>/contexts/Whenisthenextclass-followup",
+            "lifespanCount": 5,
+            "parameters": {
+                "classId": "<?= $this->classId ?>"
+            }
+        }
+    ]
+}

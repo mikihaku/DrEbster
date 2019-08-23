@@ -3,12 +3,12 @@
     "fulfillmentMessages": [
         {
             "card": {
-                "title": "{CLASS_NAME}",
-                "imageUri": "https://drebster.greensun.eu/img/online-course-512.png",
+                "title": "{ASSIGNMENT_NAME}",
+                "imageUri": "https://drebster.greensun.eu/img/assignment.png",
                 "buttons": [
                     {
-                        "text": "Open the course in Canvas",
-                        "postback": "https://ebs.instructure.com/courses/{CLASS_ID}/"
+                        "text": "Open the assignment in Canvas",
+                        "postback": "https://ebs.instructure.com/courses/{CLASS_ID}/assignments/{ASSIGNMENT_ID}"
                     }
                 ]
             }
@@ -27,16 +27,16 @@
                     },
                     {
                         "basicCard": {
-                            "title": "{CLASS_NAME}",
+                            "title": "{ASSIGNMENT_NAME}",
                             "image": {
-                                "url": "https://drebster.greensun.eu/img/online-course-512.png",
-                                "accessibilityText": "Course icon"
+                                "url": "https://drebster.greensun.eu/img/assignment.png",
+                                "accessibilityText": "Assignment icon"
                             },
                             "buttons": [
                                 {
-                                    "title": "Open the course in Canvas",
+                                    "title": "Open the assignment in Canvas",
                                     "openUrlAction": {
-                                        "url": "https://ebs.instructure.com/courses/{CLASS_ID}/"
+                                        "url": "https://ebs.instructure.com/courses/{CLASS_ID}/assignments/{ASSIGNMENT_ID}"
                                     }
                                 }
                             ],
@@ -51,14 +51,5 @@
                 ]
             }
         }
-    },
-    "outputContexts": [
-        {
-            "name": "projects/{PROJECT_ID}/agent/sessions/{SESSION_ID}/contexts/Whenisthenextclass-followup",
-            "lifespanCount": 5,
-            "parameters": {
-                "classId": "{CLASS_ID}"
-            }
-        }
-    ]
+    }
 }

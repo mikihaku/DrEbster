@@ -18,7 +18,7 @@
                     },
                     {
                         "simpleResponse": {
-                            "textToSpeech": "\n{TEXT_2_CONTINUE}"
+                            "textToSpeech": "{TEXT_2_CONTINUE}"
                         }
                     }
                 ]
