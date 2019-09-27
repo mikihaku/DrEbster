@@ -1,4 +1,4 @@
-# The Ebster App
+# The Student Helper (Former The Ebster App)
 Google Assistant Webhook to query Canvas API and 'hack' TimeEdit. 
 Produced as a part of an assignment for EBS class.
 
